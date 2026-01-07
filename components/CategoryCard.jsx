@@ -1,11 +1,6 @@
-import Link from 'next/link';
+import Link from "next/link";
 
-type CategoryCardProps = {
-  name: string;
-  image: string;
-};
-
-const CategoryCard = ({ name, image }: CategoryCardProps) => {
+const CategoryCard = ({ name, image }) => {
   const label = name.charAt(0).toUpperCase() + name.slice(1);
 
   return (
@@ -16,9 +11,7 @@ const CategoryCard = ({ name, image }: CategoryCardProps) => {
           alt={name}
           className="w-28 h-16 object-contain mx-auto mb-2"
         />
-        <h3 className="text-lg font-semibold text-gray-700">
-          {label}
-        </h3>
+        <h3 className="text-lg font-semibold text-gray-700">{label}</h3>
       </div>
     </Link>
   );

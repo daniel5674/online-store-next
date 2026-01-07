@@ -5,10 +5,10 @@ import Link from 'next/link';
 import { useUser } from '@/context/UserContext';
 import { useCart } from '@/context/CartContext';
 
-const Header: React.FC = () => {
+const Header = () => {
   const { user } = useUser();
   const { cartItems } = useCart();
-  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <header className="bg-white shadow p-4 flex justify-between items-center relative">

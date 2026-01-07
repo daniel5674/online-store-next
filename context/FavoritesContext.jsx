@@ -1,47 +1,29 @@
-'use client';
+"use client";
 
-import React, {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-} from 'react';
-import type { Product } from '@/data/products';
-
-// ---- Types ---- //
-interface FavoritesContextType {
-  favorites: Product[];
-  addToFavorites: (product: Product) => void;
-  removeFromFavorites: (id: string | number) => void;
-  isFavorite: (id: string | number) => boolean;
-}
-
-interface FavoritesProviderProps {
-  children: ReactNode;
-}
+import React, { createContext, useContext, useState } from "react";
 
 // ---- יצירת הקונטקסט ---- //
-const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
+const FavoritesContext = createContext(null);
 
 // ---- Provider ---- //
-export default function FavoritesProvider({ children }: FavoritesProviderProps) {
-  const [favorites, setFavorites] = useState<Product[]>([]);
+export default function FavoritesProvider({ children }) {
+  const [favorites, setFavorites] = useState([]);
 
-  const addToFavorites = (product: Product) => {
+  function addToFavorites(product) {
     setFavorites((prev) => {
       // אם המוצר כבר קיים – לא מוסיפים שוב
       if (prev.some((p) => p.id === product.id)) return prev;
       return [...prev, product];
     });
-  };
+  }
 
-  const removeFromFavorites = (id: string | number) => {
+  function removeFromFavorites(id) {
     setFavorites((prev) => prev.filter((p) => p.id !== id));
-  };
+  }
 
-  const isFavorite = (id: string | number) => {
+  function isFavorite(id) {
     return favorites.some((p) => p.id === id);
-  };
+  }
 
   return (
     <FavoritesContext.Provider
@@ -57,7 +39,7 @@ export function useFavorites() {
   const context = useContext(FavoritesContext);
 
   if (!context) {
-    throw new Error('useFavorites must be used inside FavoritesProvider');
+    throw new Error("useFavorites must be used inside FavoritesProvider");
   }
 
   return context;

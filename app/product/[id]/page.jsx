@@ -5,17 +5,13 @@ import { useCart } from '@/context/CartContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import products from '@/data/products';
 
-type ProductPageProps = {
-  params: Promise<{ id: string }>;
-};
-
-export default function ProductPage({ params }: ProductPageProps) {
-  // ⬅️ כאן אנחנו פותחים את ה-Promise של params
+export default function ProductPage({ params }) {
+  // פתיחת ה-Promise של params (Next.js App Router)
   const { id } = use(params);
   const productId = String(id);
 
-  // למצוא את המוצר לפי ה-id
-  const product = products.find((p: any) => String(p.id) === productId);
+  // למצוא את המוצר לפי id
+  const product = products.find((p) => String(p.id) === productId);
 
   const { addToCart } = useCart();
   const { favorites, addToFavorites } = useFavorites();
@@ -26,14 +22,14 @@ export default function ProductPage({ params }: ProductPageProps) {
   const [selectedSize, setSelectedSize] = useState('');
   const [message, setMessage] = useState('');
 
-  // לבדוק אם המוצר כבר במועדפים
+  // בדיקה אם המוצר כבר במועדפים
   useEffect(() => {
     if (!product) return;
-    const found = favorites.some((item: any) => item.id === product.id);
+    const found = favorites.some((item) => item.id === product.id);
     setIsFavorite(found);
   }, [favorites, product]);
 
-  const showMessage = (text: string) => {
+  const showMessage = (text) => {
     setMessage(text);
     setTimeout(() => setMessage(''), 2500);
   };
@@ -83,8 +79,9 @@ export default function ProductPage({ params }: ProductPageProps) {
             className="rounded border"
             style={{ width: '300px', height: 'auto' }}
           />
+
           <div className="flex gap-2 mt-4">
-            {product.images.map((img: string, index: number) => (
+            {product.images.map((img, index) => (
               <img
                 key={index}
                 src={img}
@@ -109,15 +106,19 @@ export default function ProductPage({ params }: ProductPageProps) {
         {/* פרטי מוצר */}
         <div className="w-full md:w-1/2 space-y-4">
           <p className="text-lg text-gray-700">{product.description}</p>
-          <p className="text-2xl text-green-600 font-bold">₪{product.price}</p>
-          <p className="text-sm text-gray-500">קטגוריה: {product.category}</p>
+          <p className="text-2xl text-green-600 font-bold">
+            ₪{product.price}
+          </p>
+          <p className="text-sm text-gray-500">
+            קטגוריה: {product.category}
+          </p>
 
           {/* צבעים */}
           {product.colors && product.colors.length > 0 && (
             <div>
               <p className="font-semibold mb-2">בחר צבע:</p>
               <div className="flex gap-2">
-                {product.colors.map((color: string, index: number) => (
+                {product.colors.map((color, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedColor(color)}
@@ -130,6 +131,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                   />
                 ))}
               </div>
+
               {selectedColor && (
                 <p className="text-sm text-gray-600 mt-2">
                   צבע נבחר: {selectedColor}
@@ -143,7 +145,7 @@ export default function ProductPage({ params }: ProductPageProps) {
             <div>
               <p className="font-semibold mb-2 mt-4">בחר מידה:</p>
               <div className="flex gap-2 flex-wrap">
-                {product.sizes.map((size: string) => (
+                {product.sizes.map((size) => (
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
@@ -157,6 +159,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                   </button>
                 ))}
               </div>
+
               {selectedSize && (
                 <p className="text-sm text-gray-600 mt-2">
                   מידה נבחרת: {selectedSize}

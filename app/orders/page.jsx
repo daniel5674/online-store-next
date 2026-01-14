@@ -5,7 +5,7 @@ import { useOrders } from '@/context/OrdersContext';
 import Link from 'next/link';
 
 export default function OrdersPage() {
-  const { orders } = useOrders() as { orders: any[] };
+  const { orders } = useOrders();
 
   if (!orders || orders.length === 0) {
     return (
@@ -27,10 +27,12 @@ export default function OrdersPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-2xl font-bold mb-4 text-center">ההזמנות שלי 📦</h1>
+        <h1 className="text-2xl font-bold mb-4 text-center">
+          ההזמנות שלי 📦
+        </h1>
 
         <div className="space-y-4 max-h-[70vh] overflow-y-auto">
-          {orders.map((order: any) => (
+          {orders.map((order) => (
             <div
               key={order.id}
               className="border rounded-md p-3 flex flex-col gap-1"
@@ -41,12 +43,14 @@ export default function OrdersPage() {
                   {new Date(order.createdAt).toLocaleString('he-IL')}
                 </span>
               </p>
+
               <p className="text-sm">
                 סה״כ:{' '}
                 <span className="font-bold text-green-600">
                   ₪{order.total}
                 </span>
               </p>
+
               <p className="text-xs text-gray-500">
                 מספר פריטים: {order.items.length}
               </p>

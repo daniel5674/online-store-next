@@ -14,10 +14,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const cartCount =
-    cartItems?.reduce(
-      (sum: number, item: any) => sum + (item.quantity || 1),
-      0
-    ) || 0;
+    cartItems?.reduce((sum, item) => sum + (item.quantity || 1), 0) || 0;
 
   const favoritesCount = favorites?.length || 0;
 

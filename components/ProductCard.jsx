@@ -4,22 +4,17 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { useFavorites } from '@/context/FavoritesContext';
-import type { Product } from '@/data/products';
 
-type ProductCardProps = {
-  product: Product;
-};
-
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product }) {
   const { addToCart } = useCart();
   const { favorites, addToFavorites, removeFromFavorites } = useFavorites();
 
-  const [currentImage, setCurrentImage] = useState<number>(0);
-  const [isFavorite, setIsFavorite] = useState<boolean>(false);
-  const [successMessage, setSuccessMessage] = useState<string>('');
+  const [currentImage, setCurrentImage] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-    const isFav = favorites.some((item: Product) => item.id === product.id);
+    const isFav = favorites.some((item) => item.id === product.id);
     setIsFavorite(isFav);
   }, [favorites, product.id]);
 
@@ -73,9 +68,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
 
           <p className="text-gray-600 text-sm">
-            <Link href={`/category/${product.category}`}>
-              {product.category}
-            </Link>
+            <Link href={`/category/${product.category}`}>{product.category}</Link>
           </p>
           <p className="mt-1 font-bold text-green-600">₪{product.price}</p>
         </div>

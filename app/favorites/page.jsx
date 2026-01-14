@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useFavorites } from '@/context/FavoritesContext';
 
 export default function FavoritesPage() {
@@ -28,21 +29,22 @@ export default function FavoritesPage() {
         </h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {favorites.map((item: any) => (
+          {favorites.map((item) => (
             <div
               key={item.id}
               className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition flex flex-col"
             >
-              <img
+              <Image
                 src={item.images?.[0] || item.image}
                 alt={item.name}
+                width={300}
+                height={160}
                 className="w-full h-40 object-contain mb-4"
               />
 
               <h2 className="font-bold text-lg">{item.name}</h2>
               <p className="text-green-600 font-semibold">₪{item.price}</p>
 
-              {/* כפתורים */}
               <div className="flex justify-between mt-4">
                 <Link
                   href={`/product/${item.id}`}

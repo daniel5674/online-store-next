@@ -7,7 +7,7 @@ import { useOrders } from '@/context/OrdersContext';
 
 export default function CheckoutPage() {
   const { cartItems, clearCart } = useCart();
-  const { addOrder } = useOrders(); 
+  const { addOrder } = useOrders();
 
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
@@ -16,42 +16,40 @@ export default function CheckoutPage() {
   const [submitted, setSubmitted] = useState(false);
 
   const total = cartItems.reduce(
-    (sum: number, item: any) => sum + item.price * (item.quantity || 1),
+    (sum, item) => sum + item.price * (item.quantity || 1),
     0
   );
 
-const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     if (!fullName || !phone || !address) {
       alert('אנא מלא שם, טלפון וכתובת');
       return;
     }
+
     const newOrder = {
-        id: Date.now().toString(),          // עכשיו string
-        fullName,
-        phone,
-        address,
-        note,
-        total,
-        items: cartItems,
-        createdAt: new Date().toISOString() // string
-      };
-  
-    addOrder(newOrder);   // 🟢 שמירה בהיסטוריה
-  
+      id: Date.now().toString(),
+      fullName,
+      phone,
+      address,
+      note,
+      total,
+      items: cartItems,
+      createdAt: new Date().toISOString(),
+    };
+
+    addOrder(newOrder);
+
     setSubmitted(true);
     clearCart();
   };
 
-  if (!cartItems || cartItems.length === 0 && !submitted) {
+  if ((!cartItems || cartItems.length === 0) && !submitted) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
         <h1 className="text-3xl font-bold mb-4">הסל שלך ריק 🛒</h1>
-        <Link
-          href="/"
-          className="text-blue-600 underline hover:text-blue-800 text-lg"
-        >
+        <Link href="/" className="text-blue-600 underline hover:text-blue-800 text-lg">
           חזרה לקניות
         </Link>
       </div>
@@ -67,10 +65,7 @@ const handleSubmit = (e: React.FormEvent) => {
             ההזמנה התקבלה למערכת. ניצור איתך קשר בטלפון: <br />
             <span className="font-semibold">{phone}</span>
           </p>
-          <Link
-            href="/"
-            className="text-blue-600 underline hover:text-blue-800 text-lg"
-          >
+          <Link href="/" className="text-blue-600 underline hover:text-blue-800 text-lg">
             חזרה לדף הבית
           </Link>
         </div>
@@ -120,7 +115,9 @@ const handleSubmit = (e: React.FormEvent) => {
             </div>
 
             <div>
-              <label className="block mb-1 text-sm font-medium">הערות להזמנה (לא חובה)</label>
+              <label className="block mb-1 text-sm font-medium">
+                הערות להזמנה (לא חובה)
+              </label>
               <textarea
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
@@ -143,9 +140,9 @@ const handleSubmit = (e: React.FormEvent) => {
           <h2 className="text-xl font-bold mb-4">סיכום הזמנה</h2>
 
           <div className="space-y-3 max-h-80 overflow-y-auto border-b pb-4 mb-4">
-            {cartItems.map((item: any) => (
+            {cartItems.map((item) => (
               <div
-                key={item.id + '-' + item.selectedSize + '-' + item.selectedColor}
+                key={`${item.id}-${item.selectedSize}-${item.selectedColor}`}
                 className="flex items-center justify-between gap-3"
               >
                 <div className="flex items-center gap-3">
@@ -157,22 +154,17 @@ const handleSubmit = (e: React.FormEvent) => {
                   <div>
                     <p className="font-semibold text-sm">{item.name}</p>
                     {item.selectedSize && (
-                      <p className="text-xs text-gray-600">
-                        מידה: {item.selectedSize}
-                      </p>
+                      <p className="text-xs text-gray-600">מידה: {item.selectedSize}</p>
                     )}
                     {item.selectedColor && (
-                      <p className="text-xs text-gray-600">
-                        צבע: {item.selectedColor}
-                      </p>
+                      <p className="text-xs text-gray-600">צבע: {item.selectedColor}</p>
                     )}
                   </div>
                 </div>
+
                 <div className="text-right text-sm">
                   <p>כמות: {item.quantity || 1}</p>
-                  <p className="font-semibold">
-                    ₪{item.price * (item.quantity || 1)}
-                  </p>
+                  <p className="font-semibold">₪{item.price * (item.quantity || 1)}</p>
                 </div>
               </div>
             ))}
@@ -184,10 +176,7 @@ const handleSubmit = (e: React.FormEvent) => {
           </div>
 
           <div className="mt-4 text-center">
-            <Link
-              href="/cart"
-              className="text-blue-600 underline hover:text-blue-800 text-sm"
-            >
+            <Link href="/cart" className="text-blue-600 underline hover:text-blue-800 text-sm">
               ← חזרה לסל
             </Link>
           </div>

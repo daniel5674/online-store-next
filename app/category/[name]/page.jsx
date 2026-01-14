@@ -4,11 +4,7 @@ import { use } from 'react';
 import products from '@/data/products';
 import Link from 'next/link';
 
-type CategoryPageProps = {
-  params: Promise<{ name: string }>;
-};
-
-export default function CategoryPage({ params }: CategoryPageProps) {
+export default function CategoryPage({ params }) {
   // לפתוח את ה-Promise של params
   const { name } = use(params);
 
@@ -32,7 +28,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
             className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition"
           >
             <img
-              src={product.images[0]}
+              src={product.images?.[0]}
               alt={product.name}
               className="w-full h-40 object-contain mb-4"
             />

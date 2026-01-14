@@ -1,30 +1,23 @@
-import './globals.css'
-import { AppProviders } from './providers'
-import Navbar from '@/components/Navbar'
+import './globals.css';
+import { AppProviders } from './providers';
+import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
+export const metadata = {
   title: 'Online Store',
   description: 'Migrated from React',
-}
+};
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }) {
   return (
     <html lang="he" dir="rtl">
       <body>
         <AppProviders>
           <Navbar />
-          <main className="min-h-screen bg-gray-50">
-            {children}
-          </main>
+          <main className="min-h-screen bg-gray-50">{children}</main>
           <Footer />
         </AppProviders>
       </body>
     </html>
-  )
+  );
 }

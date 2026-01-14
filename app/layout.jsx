@@ -1,7 +1,7 @@
 import './globals.css';
 import { AppProviders } from './providers';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import Footer from '../components/Footer';
+import Navbar from '../components/Navbar';
 
 export const metadata = {
   title: 'Online Store',

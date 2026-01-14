@@ -1,103 +1,90 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import type { ReactNode } from 'react';
-import type { Product } from '@/data/products';
+import React, { createContext, useContext, useEffect, useState } from "react";
 
-export type CartItem = Product & {
-  quantity: number;
-  selectedColor?: string;
-  selectedSize?: string;
-};
+const CartContext = createContext(null);
 
-type CartContextType = {
-  cartItems: CartItem[];
-  addToCart: (product: Product | CartItem) => void;
-  removeFromCart: (id: string) => void;
-  clearCart: () => void;
-  updateQuantity: (id: string, newQuantity: number) => void;
-};
-
-const CartContext = createContext<CartContextType | undefined>(undefined);
-
-export const useCart = () => {
+export function useCart() {
   const context = useContext(CartContext);
   if (!context) {
-    throw new Error('useCart must be used within CartProvider');
+    throw new Error("useCart must be used within CartProvider");
   }
   return context;
-};
+}
 
-type CartProviderProps = {
-  children: ReactNode;
-};
+export default function CartProvider({ children }) {
+  const [cartItems, setCartItems] = useState([]);
 
-const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-
+  // load from localStorage
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const storedCart = localStorage.getItem('cart');
+    if (typeof window === "undefined") return;
+    const storedCart = localStorage.getItem("cart");
     if (storedCart) {
       try {
-        const parsed: CartItem[] = JSON.parse(storedCart);
-        setCartItems(parsed);
+        setCartItems(JSON.parse(storedCart));
       } catch (err) {
-        console.error('Failed to parse cart from localStorage', err);
+        console.error("Failed to parse cart from localStorage", err);
       }
     }
   }, []);
 
+  // save to localStorage
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    localStorage.setItem('cart', JSON.stringify(cartItems));
+    if (typeof window === "undefined") return;
+    localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const addToCart = (product: Product | CartItem) => {
-    setCartItems(prev => {
-      const existing = prev.find(item => item.id === product.id);
+  function addToCart(product) {
+    setCartItems((prev) => {
+      const existing = prev.find((item) => item.id === product.id);
+
       if (existing) {
-        return prev.map(item =>
+        return prev.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
+
       return [
         ...prev,
         {
           ...product,
-          quantity: 'quantity' in product && product.quantity
-            ? product.quantity
-            : 1,
-        } as CartItem,
+          quantity: product.quantity ?? 1,
+        },
       ];
     });
-  };
+  }
 
-  const removeFromCart = (id: string) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
-  };
+  function removeFromCart(id) {
+    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  }
 
-  const clearCart = () => setCartItems([]);
+  function clearCart() {
+    setCartItems([]);
+  }
 
-  const updateQuantity = (id: string, newQuantity: number) => {
-    setCartItems(prev =>
-      prev.map(item =>
+  function updateQuantity(id, newQuantity) {
+    setCartItems((prev) =>
+      prev.map((item) =>
         item.id === id
-          ? { ...item, quantity: Math.max(1, newQuantity) }
+          ? { ...item, quantity: Math.max(1, Number(newQuantity)) }
           : item
       )
     );
-  };
+  }
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, clearCart, updateQuantity }}
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        updateQuantity,
+      }}
     >
       {children}
     </CartContext.Provider>
   );
-};
-
-export default CartProvider;
+}

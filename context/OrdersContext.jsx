@@ -1,62 +1,35 @@
-'use client';
+"use client";
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  ReactNode,
-} from 'react';
+import React, { createContext, useContext, useEffect, useState } from "react";
 
-export type OrderItem = {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-};
+const OrdersContext = createContext(null);
 
-export type Order = {
-  id: string;           // נשתמש במחרוזת
-  items: OrderItem[];
-  total: number;
-  createdAt: string;    // נשמור בתור ISO string
-  fullName: string;
-  phone: string;
-  address: string;
-  note?: string;        // שדה אופציונלי
-};
-
-type OrdersContextType = {
-  orders: Order[];
-  addOrder: (order: Order) => void;
-};
-
-const OrdersContext = createContext<OrdersContextType | undefined>(undefined);
-
-export const useOrders = () => {
+export function useOrders() {
   const ctx = useContext(OrdersContext);
-  if (!ctx) throw new Error('useOrders must be used inside OrdersProvider');
+  if (!ctx) {
+    throw new Error("useOrders must be used inside OrdersProvider");
+  }
   return ctx;
-};
+}
 
-export default function OrdersProvider({ children }: { children: ReactNode }) {
-  const [orders, setOrders] = useState<Order[]>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('orders');
+export default function OrdersProvider({ children }) {
+  const [orders, setOrders] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("orders");
       return saved ? JSON.parse(saved) : [];
     }
     return [];
   });
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('orders', JSON.stringify(orders));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("orders", JSON.stringify(orders));
     }
   }, [orders]);
 
-  const addOrder = (order: Order) => {
+  function addOrder(order) {
     setOrders((prev) => [...prev, order]);
-  };
+  }
 
   return (
     <OrdersContext.Provider value={{ orders, addOrder }}>
